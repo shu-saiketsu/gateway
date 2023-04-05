@@ -76,11 +76,26 @@ static void AddAuth0(WebApplicationBuilder builder)
 
     builder.Services.AddAuthorization(options =>
     {
-        options.AddPolicy("read:users",
-            policy => policy.Requirements.Add(new HasScopeRequirement("read:users", domain!)));
+        var policies = new List<string>
+        {
+            "read:candidates", "create:candidates", "delete:candidates",
+            "read:elections", "create:elections", "update:elections", "delete:elections",
+            "read:parties", "create:parties", "delete:parties",
+            "read:users", "create:users", "delete:users", "sanction:users"
+        };
+
+        policies.ForEach(policyName =>
+        {
+            var scopeRequirement = new HasScopeRequirement(policyName, domain);
+            options.AddPolicy(policyName, policy => policy.Requirements.Add(scopeRequirement));
+        });
     });
 
     builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
+
+    // bypass authentication in development
+    if (builder.Environment.IsDevelopment())
+        builder.Services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
 }
 
 static void AddServices(WebApplicationBuilder builder)

@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Saiketsu.Gateway.Application.Elections.Commands.AddUserToElection
+namespace Saiketsu.Gateway.Application.Elections.Commands.AddUserToElection;
+
+public sealed class AddUserToElectionCommandValidator : AbstractValidator<AddUserToElectionCommand>
 {
-    public sealed class AddUserToElectionCommandValidator : AbstractValidator<AddUserToElectionCommand>
-    {
-        public AddUserToElectionCommandValidator()
-        {
-            
-        }
-    }
 }

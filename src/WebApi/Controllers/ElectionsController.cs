@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Saiketsu.Gateway.Application.Elections.Commands.AddUserToElection;
 using Saiketsu.Gateway.Application.Elections.Commands.CreateElection;
@@ -24,6 +25,7 @@ public sealed class ElectionsController : ControllerBase
     [HttpGet]
     [SwaggerOperation(Summary = "Retrieve all elections")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved elections successfully", typeof(List<ElectionEntity>))]
+    [Authorize("read:elections")]
     public async Task<IActionResult> GetAll()
     {
         var request = new GetElectionsQuery();
@@ -37,6 +39,7 @@ public sealed class ElectionsController : ControllerBase
     [SwaggerOperation(Summary = "Create a new election")]
     [SwaggerResponse(StatusCodes.Status200OK, "Created election successfully", typeof(ElectionEntity))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Unable to create election")]
+    [Authorize("create:elections")]
     public async Task<IActionResult> Create([FromBody] CreateElectionCommand command)
     {
         var response = await _mediator.Send(command);
@@ -51,6 +54,7 @@ public sealed class ElectionsController : ControllerBase
     [SwaggerOperation(Summary = "Adds a user to an election")]
     [SwaggerResponse(StatusCodes.Status200OK, "Created election user link successfully")]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Unable to create link")]
+    [Authorize("update:elections")]
     public async Task<IActionResult> AddUserToElection([FromBody] AddUserToElectionCommand command)
     {
         var response = await _mediator.Send(command);
@@ -64,6 +68,7 @@ public sealed class ElectionsController : ControllerBase
     [SwaggerOperation(Summary = "Retrieve an election")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved election successfully", typeof(ElectionEntity))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Election does not exist")]
+    [Authorize("read:elections")]
     public async Task<IActionResult> Get(int id)
     {
         var request = new GetElectionQuery { Id = id };
@@ -79,6 +84,7 @@ public sealed class ElectionsController : ControllerBase
     [SwaggerOperation(Summary = "Delete an election")]
     [SwaggerResponse(StatusCodes.Status200OK, "Deleted election successfully")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Election does not exist")]
+    [Authorize("delete:elections")]
     public async Task<IActionResult> Delete(int id)
     {
         var request = new DeleteElectionCommand { Id = id };

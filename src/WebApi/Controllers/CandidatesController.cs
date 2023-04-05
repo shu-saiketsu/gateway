@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Saiketsu.Gateway.Application.Candidates.Commands.CreateCandidate;
 using Saiketsu.Gateway.Application.Candidates.Commands.DeleteCandidate;
 using Saiketsu.Gateway.Application.Candidates.Queries.GetCandidate;
 using Saiketsu.Gateway.Application.Candidates.Queries.GetCandidates;
-using Saiketsu.Gateway.Application.Elections.Commands.AddUserToElection;
 using Saiketsu.Gateway.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -25,6 +25,7 @@ public sealed class CandidatesController : ControllerBase
     [HttpGet]
     [SwaggerOperation(Summary = "Retrieve all candidates")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved candidates successfully", typeof(List<CandidateEntity>))]
+    [Authorize("read:candidates")]
     public async Task<IActionResult> GetAll()
     {
         var message = new GetCandidatesQuery();
@@ -38,7 +39,8 @@ public sealed class CandidatesController : ControllerBase
     [SwaggerOperation(Summary = "Create a new candidate")]
     [SwaggerResponse(StatusCodes.Status200OK, "Created candidate successfully", typeof(CandidateEntity))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Unable to create candidate")]
-    public async Task<IActionResult> Add([FromBody] [Required] CreateCandidateCommand command)
+    [Authorize("create:candidates")]
+    public async Task<IActionResult> Add([FromBody] CreateCandidateCommand command)
     {
         var candidate = await _mediator.Send(command);
 
@@ -51,6 +53,7 @@ public sealed class CandidatesController : ControllerBase
     [SwaggerOperation(Summary = "Retrieve a candidate")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved candidate successfully", typeof(CandidateEntity))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Candidate does not exist")]
+    [Authorize("read:candidates")]
     public async Task<IActionResult> Get([Required] int id)
     {
         var message = new GetCandidateQuery { Id = id };
@@ -67,6 +70,7 @@ public sealed class CandidatesController : ControllerBase
     [SwaggerOperation(Summary = "Delete a candidate")]
     [SwaggerResponse(StatusCodes.Status200OK, "Deleted candidate successfully")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Candidate does not exist")]
+    [Authorize("delete:candidates")]
     public async Task<IActionResult> Delete([Required] int id)
     {
         var message = new DeleteCandidateCommand { Id = id };

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Saiketsu.Gateway.Application.Parties.Commands.CreateParty;
 using Saiketsu.Gateway.Application.Parties.Commands.DeleteParty;
@@ -24,6 +25,7 @@ public sealed class PartiesController : ControllerBase
     [HttpGet]
     [SwaggerOperation(Summary = "Retrieve all parties")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved parties successfully", typeof(List<PartyEntity>))]
+    [Authorize("read:parties")]
     public async Task<IActionResult> GetAll()
     {
         var request = new GetPartiesQuery();
@@ -36,6 +38,7 @@ public sealed class PartiesController : ControllerBase
     [SwaggerOperation(Summary = "Create a new party")]
     [SwaggerResponse(StatusCodes.Status200OK, "Created party successfully", typeof(PartyEntity))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Unable to create party")]
+    [Authorize("create:parties")]
     public async Task<IActionResult> Add([FromBody] [Required] CreatePartyCommand command)
     {
         var candidate = await _mediator.Send(command);
@@ -50,6 +53,7 @@ public sealed class PartiesController : ControllerBase
     [SwaggerOperation(Summary = "Retrieve a party")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved party successfully", typeof(PartyEntity))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Party does not exist")]
+    [Authorize("read:parties")]
     public async Task<IActionResult> Get([Required] int id)
     {
         var message = new GetPartyQuery { Id = id };
@@ -66,6 +70,7 @@ public sealed class PartiesController : ControllerBase
     [SwaggerOperation(Summary = "Delete a party")]
     [SwaggerResponse(StatusCodes.Status200OK, "Deleted party successfully")]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Party does not exist")]
+    [Authorize("delete:parties")]
     public async Task<IActionResult> Delete([Required] int id)
     {
         var message = new DeletePartyCommand { Id = id };
