@@ -1,4 +1,5 @@
-﻿using Saiketsu.Gateway.Application.Elections.Commands.AddUserToElection;
+﻿using Saiketsu.Gateway.Application.Elections.Commands.AddCandidateToElection;
+using Saiketsu.Gateway.Application.Elections.Commands.AddUserToElection;
 using Saiketsu.Gateway.Application.Elections.Commands.CreateElection;
 using Saiketsu.Gateway.Domain.Entities.Election;
 
@@ -11,4 +12,5 @@ public interface IElectionService
     Task<bool> DeleteElectionAsync(int id);
     Task<ElectionEntity?> CreateElectionAsync(CreateElectionCommand command);
     Task<bool> AddUserToElectionAsync(AddUserToElectionCommand command);
+    Task<bool> AddCandidateToElectionAsync(AddCandidateToElectionCommand command);
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 using System.Text.Json;
+using Saiketsu.Gateway.Application.Elections.Commands.AddCandidateToElection;
 using Saiketsu.Gateway.Application.Elections.Commands.AddUserToElection;
 using Saiketsu.Gateway.Application.Elections.Commands.CreateElection;
 using Saiketsu.Gateway.Application.Interfaces;
@@ -77,6 +78,17 @@ public sealed class ElectionService : IElectionService
         var json = JsonSerializer.Serialize(command);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await httpClient.PostAsync("/api/elections/add-user", content);
+
+        return response.StatusCode == HttpStatusCode.OK;
+    }
+
+    public async Task<bool> AddCandidateToElectionAsync(AddCandidateToElectionCommand command)
+    {
+        var httpClient = _httpClientFactory.CreateClient("ElectionClient");
+
+        var json = JsonSerializer.Serialize(command);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await httpClient.PostAsync("/api/elections/add-candidate", content);
 
         return response.StatusCode == HttpStatusCode.OK;
     }

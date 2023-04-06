@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using AutoFixture.Xunit2;
 using FluentValidation;
 using Moq;
 using Saiketsu.Gateway.Application.Candidates.Queries.GetCandidates;

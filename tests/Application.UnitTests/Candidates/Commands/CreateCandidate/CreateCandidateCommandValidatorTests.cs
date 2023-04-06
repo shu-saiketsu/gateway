@@ -1,4 +1,5 @@
-﻿using FluentValidation.TestHelper;
+﻿using AutoFixture.Xunit2;
+using FluentValidation.TestHelper;
 using Saiketsu.Gateway.Application.Candidates.Commands.CreateCandidate;
 using Xunit;
 
@@ -45,5 +46,19 @@ public sealed class CreateCandidateCommandValidatorTests : IDisposable
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
+
+    [Theory]
+    [AutoData]
+    public void Should_have_no_error_when_party_is_null(string name)
+    {
+        // Arrange
+        var command = new CreateCandidateCommand { Name = name, PartyId = null };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldNotHaveValidationErrorFor(x => x.PartyId);
     }
 }

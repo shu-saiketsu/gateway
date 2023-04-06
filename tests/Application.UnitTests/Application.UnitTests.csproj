@@ -25,12 +25,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Elections\Commands\" />
-    <Folder Include="Elections\Queries\" />
-    <Folder Include="Parties\Commands\" />
-    <Folder Include="Parties\Queries\" />
-    <Folder Include="Users\Commands\" />
-    <Folder Include="Users\Queries\" />
+    <Folder Include="Elections\Commands\AddUserToElection\" />
+    <Folder Include="Elections\Commands\CreateElection\" />
+    <Folder Include="Elections\Commands\DeleteElection\" />
+    <Folder Include="Elections\Commands\AddCandidateToElection\" />
+    <Folder Include="Elections\Queries\GetElection\" />
+    <Folder Include="Elections\Queries\GetElections\" />
+    <Folder Include="Parties\Commands\CreateParty\" />
+    <Folder Include="Parties\Commands\DeleteParty\" />
+    <Folder Include="Parties\Queries\GetParties\" />
+    <Folder Include="Parties\Queries\GetParty\" />
+    <Folder Include="Users\Commands\BlockUser\" />
+    <Folder Include="Users\Commands\CreateUser\" />
+    <Folder Include="Users\Commands\DeleteUser\" />
+    <Folder Include="Users\Commands\UnblockUser\" />
+    <Folder Include="Users\Queries\GetUser\" />
+    <Folder Include="Users\Queries\GetUsers\" />
+    <Folder Include="Votes\Commands\" />
+    <Folder Include="Votes\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
