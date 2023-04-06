@@ -9,10 +9,10 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
     private readonly IUserService _userService;
     private readonly IValidator<DeleteUserCommand> _validator;
 
-    public DeleteUserCommandHandler(IValidator<DeleteUserCommand> validator, IUserService userService)
+    public DeleteUserCommandHandler(IUserService userService, IValidator<DeleteUserCommand> validator)
     {
-        _validator = validator;
         _userService = userService;
+        _validator = validator;
     }
 
     public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)

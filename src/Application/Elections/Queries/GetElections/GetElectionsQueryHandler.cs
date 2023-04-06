@@ -10,7 +10,7 @@ public sealed class GetElectionsQueryHandler : IRequestHandler<GetElectionsQuery
     private readonly IElectionService _electionService;
     private readonly IValidator<GetElectionsQuery> _validator;
 
-    public GetElectionsQueryHandler(IValidator<GetElectionsQuery> validator, IElectionService electionService)
+    public GetElectionsQueryHandler(IElectionService electionService, IValidator<GetElectionsQuery> validator)
     {
         _validator = validator;
         _electionService = electionService;

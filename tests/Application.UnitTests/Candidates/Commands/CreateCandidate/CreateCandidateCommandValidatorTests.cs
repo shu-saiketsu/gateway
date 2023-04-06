@@ -33,13 +33,24 @@ public sealed class CreateCandidateCommandValidatorTests : IDisposable
         result.ShouldNotHaveAnyValidationErrors();
     }
 
-    [Theory]
-    [InlineData("", null)]
-    [InlineData(null, null)]
-    public void Should_have_error_when_name_is_empty_or_null(string? name, int? partyId)
+    [Fact]
+    public void Should_have_error_when_name_is_empty()
     {
         // Arrange
-        var command = new CreateCandidateCommand { Name = name!, PartyId = partyId };
+        var command = new CreateCandidateCommand { Name = string.Empty, PartyId = 1 };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
+
+    [Fact]
+    public void Should_have_error_when_name_is_null()
+    {
+        // Arrange
+        var command = new CreateCandidateCommand { PartyId = 1 };
 
         // Act
         var result = _validator.TestValidate(command);
@@ -53,12 +64,26 @@ public sealed class CreateCandidateCommandValidatorTests : IDisposable
     public void Should_have_no_error_when_party_is_null(string name)
     {
         // Arrange
-        var command = new CreateCandidateCommand { Name = name, PartyId = null };
+        var command = new CreateCandidateCommand { Name = name };
 
         // Act
         var result = _validator.TestValidate(command);
 
         // Assert
         result.ShouldNotHaveValidationErrorFor(x => x.PartyId);
+    }
+
+    [Theory]
+    [AutoData]
+    public void Should_have_error_when_party_is_empty(string name)
+    {
+        // Arrange
+        var command = new CreateCandidateCommand { Name = name, PartyId = default(int) };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.PartyId);
     }
 }

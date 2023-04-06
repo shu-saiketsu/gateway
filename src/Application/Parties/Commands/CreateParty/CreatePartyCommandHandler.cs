@@ -10,10 +10,10 @@ public sealed class CreatePartyCommandHandler : IRequestHandler<CreatePartyComma
     private readonly IPartyService _partyService;
     private readonly IValidator<CreatePartyCommand> _validator;
 
-    public CreatePartyCommandHandler(IValidator<CreatePartyCommand> validator, IPartyService partyService)
+    public CreatePartyCommandHandler(IPartyService partyService, IValidator<CreatePartyCommand> validator)
     {
-        _validator = validator;
         _partyService = partyService;
+        _validator = validator;
     }
 
     public async Task<PartyEntity?> Handle(CreatePartyCommand request, CancellationToken cancellationToken)

@@ -9,10 +9,10 @@ public sealed class DeletePartyCommandHandler : IRequestHandler<DeletePartyComma
     private readonly IPartyService _partyService;
     private readonly IValidator<DeletePartyCommand> _validator;
 
-    public DeletePartyCommandHandler(IValidator<DeletePartyCommand> validator, IPartyService partyService)
+    public DeletePartyCommandHandler(IPartyService partyService, IValidator<DeletePartyCommand> validator)
     {
-        _validator = validator;
         _partyService = partyService;
+        _validator = validator;
     }
 
     public async Task<bool> Handle(DeletePartyCommand request, CancellationToken cancellationToken)

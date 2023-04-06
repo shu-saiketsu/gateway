@@ -10,10 +10,10 @@ public sealed class GetPartiesQueryHandler : IRequestHandler<GetPartiesQuery, Li
     private readonly IPartyService _partyService;
     private readonly IValidator<GetPartiesQuery> _validator;
 
-    public GetPartiesQueryHandler(IValidator<GetPartiesQuery> validator, IPartyService partyService)
+    public GetPartiesQueryHandler(IPartyService partyService, IValidator<GetPartiesQuery> validator)
     {
-        _validator = validator;
         _partyService = partyService;
+        _validator = validator;
     }
 
     public async Task<List<PartyEntity>> Handle(GetPartiesQuery request, CancellationToken cancellationToken)

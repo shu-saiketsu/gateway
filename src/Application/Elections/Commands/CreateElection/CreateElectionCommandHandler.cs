@@ -10,10 +10,10 @@ public sealed class CreateElectionCommandHandler : IRequestHandler<CreateElectio
     private readonly IElectionService _electionService;
     private readonly IValidator<CreateElectionCommand> _validator;
 
-    public CreateElectionCommandHandler(IValidator<CreateElectionCommand> validator, IElectionService electionService)
+    public CreateElectionCommandHandler(IElectionService electionService, IValidator<CreateElectionCommand> validator)
     {
-        _validator = validator;
         _electionService = electionService;
+        _validator = validator;
     }
 
     public async Task<ElectionEntity?> Handle(CreateElectionCommand request, CancellationToken cancellationToken)

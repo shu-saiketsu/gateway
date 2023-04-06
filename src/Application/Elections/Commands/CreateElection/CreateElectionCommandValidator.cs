@@ -10,7 +10,8 @@ public sealed class CreateElectionCommandValidator : AbstractValidator<CreateEle
             .NotEmpty();
 
         RuleFor(x => x.Type)
-            .NotEmpty();
+            .NotEmpty()
+            .IsInEnum();
 
         RuleFor(x => x.OwnerId)
             .NotEmpty();

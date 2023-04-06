@@ -10,10 +10,10 @@ public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<U
     private readonly IUserService _userService;
     private readonly IValidator<GetUsersQuery> _validator;
 
-    public GetUsersQueryHandler(IValidator<GetUsersQuery> validator, IUserService userService)
+    public GetUsersQueryHandler(IUserService userService, IValidator<GetUsersQuery> validator)
     {
-        _validator = validator;
         _userService = userService;
+        _validator = validator;
     }
 
     public async Task<List<UserEntity>> Handle(GetUsersQuery request, CancellationToken cancellationToken)

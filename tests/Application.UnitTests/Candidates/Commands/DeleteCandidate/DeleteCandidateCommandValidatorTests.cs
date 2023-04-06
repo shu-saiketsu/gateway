@@ -33,10 +33,23 @@ public sealed class DeleteCandidateCommandValidatorTests : IDisposable
     }
 
     [Fact]
-    public void Should_have_error_when_id_is_empty_or_null()
+    public void Should_have_error_when_id_is_empty()
     {
         // Arrange
-        var command = new DeleteCandidateCommand { Id = 0 };
+        var command = new DeleteCandidateCommand { Id = default };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Id);
+    }
+
+    [Fact]
+    public void Should_have_error_when_id_is_null()
+    {
+        // Arrange
+        var command = new DeleteCandidateCommand();
 
         // Act
         var result = _validator.TestValidate(command);

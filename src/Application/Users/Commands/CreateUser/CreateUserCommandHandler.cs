@@ -10,10 +10,10 @@ public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand
     private readonly IUserService _userService;
     private readonly IValidator<CreateUserCommand> _validator;
 
-    public CreateUserCommandHandler(IValidator<CreateUserCommand> validator, IUserService userService)
+    public CreateUserCommandHandler(IUserService userService, IValidator<CreateUserCommand> validator)
     {
-        _validator = validator;
         _userService = userService;
+        _validator = validator;
     }
 
     public async Task<UserEntity?> Handle(CreateUserCommand request, CancellationToken cancellationToken)

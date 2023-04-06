@@ -9,10 +9,10 @@ public sealed class DeleteElectionCommandHandler : IRequestHandler<DeleteElectio
     private readonly IElectionService _electionService;
     private readonly IValidator<DeleteElectionCommand> _validator;
 
-    public DeleteElectionCommandHandler(IValidator<DeleteElectionCommand> validator, IElectionService electionService)
+    public DeleteElectionCommandHandler(IElectionService electionService, IValidator<DeleteElectionCommand> validator)
     {
-        _validator = validator;
         _electionService = electionService;
+        _validator = validator;
     }
 
     public async Task<bool> Handle(DeleteElectionCommand request, CancellationToken cancellationToken)

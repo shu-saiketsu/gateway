@@ -31,26 +31,26 @@ public sealed class GetCandidateQueryHandlerTests
     public async Task Should_call_candidate_service_once(int id)
     {
         // Arrange
-        var command = new GetCandidateQuery { Id = id };
+        var query = new GetCandidateQuery { Id = id };
         var cancellationToken = CancellationToken.None;
 
         // Act
-        await _handler.Handle(command, cancellationToken);
+        await _handler.Handle(query, cancellationToken);
 
         // Assert
-        _mockCandidateService.Verify(x => x.GetCandidateAsync(command.Id), Times.Once);
+        _mockCandidateService.Verify(x => x.GetCandidateAsync(query.Id), Times.Once);
     }
 
     [Theory]
     [AutoData]
-    public async Task Should_validate_command_once(int id)
+    public async Task Should_validate_query_once(int id)
     {
         // Arrange
-        var command = new GetCandidateQuery { Id = id };
+        var query = new GetCandidateQuery { Id = id };
         var cancellationToken = CancellationToken.None;
 
         // Act
-        await _handler.Handle(command, cancellationToken);
+        await _handler.Handle(query, cancellationToken);
 
         // Assert
         _mockValidator.Verify(x => x.ValidateAsync(It.IsAny<ValidationContext<GetCandidateQuery>>(), cancellationToken),
@@ -62,16 +62,16 @@ public sealed class GetCandidateQueryHandlerTests
     public async Task Should_return_candidate(int id)
     {
         // Arrange
-        var command = new GetCandidateQuery { Id = id };
+        var query = new GetCandidateQuery { Id = id };
         var cancellationToken = CancellationToken.None;
         var methodResponse = _fixture.Build<CandidateEntity>()
             .With(x => x.Id, id)
             .Create();
 
-        _mockCandidateService.Setup(x => x.GetCandidateAsync(command.Id)).ReturnsAsync(methodResponse);
+        _mockCandidateService.Setup(x => x.GetCandidateAsync(query.Id)).ReturnsAsync(methodResponse);
 
         // Act
-        var response = await _handler.Handle(command, cancellationToken);
+        var response = await _handler.Handle(query, cancellationToken);
 
         // Assert
         Assert.Equal(response, methodResponse);

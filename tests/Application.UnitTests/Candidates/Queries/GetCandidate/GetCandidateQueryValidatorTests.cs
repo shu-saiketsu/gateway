@@ -1,4 +1,5 @@
-﻿using FluentValidation.TestHelper;
+﻿using AutoFixture.Xunit2;
+using FluentValidation.TestHelper;
 using Saiketsu.Gateway.Application.Candidates.Queries.GetCandidate;
 using Xunit;
 
@@ -18,15 +19,14 @@ public sealed class GetCandidateQueryValidatorTests : IDisposable
     }
 
     [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
+    [AutoData]
     public void Should_have_no_errors_when_valid_data(int id)
     {
         // Arrange
-        var command = new GetCandidateQuery { Id = id };
+        var query = new GetCandidateQuery { Id = id };
 
         // Act
-        var result = _validator.TestValidate(command);
+        var result = _validator.TestValidate(query);
 
         // Assert
         result.ShouldNotHaveAnyValidationErrors();
@@ -36,10 +36,23 @@ public sealed class GetCandidateQueryValidatorTests : IDisposable
     public void Should_have_error_when_id_is_empty()
     {
         // Arrange
-        var command = new GetCandidateQuery { Id = 0 };
+        var query = new GetCandidateQuery { Id = default };
 
         // Act
-        var result = _validator.TestValidate(command);
+        var result = _validator.TestValidate(query);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Id);
+    }
+
+    [Fact]
+    public void Should_have_error_when_id_is_null()
+    {
+        // Arrange
+        var query = new GetCandidateQuery();
+
+        // Act
+        var result = _validator.TestValidate(query);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Id);

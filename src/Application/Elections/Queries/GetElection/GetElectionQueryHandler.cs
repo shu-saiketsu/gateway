@@ -10,10 +10,10 @@ public sealed class GetElectionQueryHandler : IRequestHandler<GetElectionQuery, 
     private readonly IElectionService _electionService;
     private readonly IValidator<GetElectionQuery> _validator;
 
-    public GetElectionQueryHandler(IValidator<GetElectionQuery> validator, IElectionService electionService)
+    public GetElectionQueryHandler(IElectionService electionService, IValidator<GetElectionQuery> validator)
     {
-        _validator = validator;
         _electionService = electionService;
+        _validator = validator;
     }
 
     public async Task<ElectionEntity?> Handle(GetElectionQuery request, CancellationToken cancellationToken)
