@@ -40,9 +40,8 @@ public sealed class GetCandidatesQueryHandlerTests
         _mockCandidateService.Verify(x => x.GetCandidatesAsync(), Times.Once);
     }
 
-    [Theory]
-    [AutoData]
-    public async Task Should_validate_command_once(int id)
+    [Fact]
+    public async Task Should_validate_command_once()
     {
         // Arrange
         var command = new GetCandidatesQuery();

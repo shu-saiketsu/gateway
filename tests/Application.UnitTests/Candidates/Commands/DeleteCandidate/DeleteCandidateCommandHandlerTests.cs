@@ -71,6 +71,6 @@ public sealed class DeleteCandidateCommandHandlerTests
         var response = await _handler.Handle(command, cancellationToken);
 
         // Assert
-        Assert.Equal(response, true);
+        Assert.True(response);
     }
 }
