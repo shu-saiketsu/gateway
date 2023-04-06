@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,9 +12,12 @@ using Saiketsu.Gateway.WebApi.Security;
 using Serilog;
 using Serilog.Events;
 
+const string serviceName = "Gateway";
+
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .Enrich.FromLogContext()
+    .Enrich.WithProperty("ServiceName", serviceName)
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
@@ -23,6 +27,7 @@ static void InjectSerilog(WebApplicationBuilder builder)
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services)
         .Enrich.FromLogContext()
+        .Enrich.WithProperty("ServiceName", serviceName)
         .WriteTo.Console());
 }
 
@@ -91,11 +96,21 @@ static void AddAuth0(WebApplicationBuilder builder)
         });
     });
 
+    // implement scope checker
     builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
     // bypass authentication in development
     if (builder.Environment.IsDevelopment())
         builder.Services.AddSingleton<IAuthorizationHandler, AllowAnonymousHandler>();
+}
+
+static void AddInternalService(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<ICandidateService, CandidateService>();
+    builder.Services.AddScoped<IPartyService, PartyService>();
+    builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddScoped<IElectionService, ElectionService>();
+    builder.Services.AddScoped<IVoteService, VoteService>();
 }
 
 static void AddServices(WebApplicationBuilder builder)
@@ -110,15 +125,10 @@ static void AddServices(WebApplicationBuilder builder)
     AddHttpClients(builder);
     AddSwagger(builder);
     AddAuth0(builder);
-
-    builder.Services.AddScoped<ICandidateService, CandidateService>();
-    builder.Services.AddScoped<IPartyService, PartyService>();
-    builder.Services.AddScoped<IUserService, UserService>();
-    builder.Services.AddScoped<IElectionService, ElectionService>();
-    builder.Services.AddScoped<IVoteService, VoteService>();
+    AddInternalService(builder);
 }
 
-void AddMiddleware(WebApplication app)
+static void AddMiddleware(WebApplication app)
 {
     app.UseSerilogRequestLogging();
 
