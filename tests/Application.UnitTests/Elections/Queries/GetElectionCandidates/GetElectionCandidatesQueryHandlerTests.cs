@@ -1,81 +1,74 @@
 ﻿using AutoFixture;
 using FluentValidation;
 using Moq;
-using Saiketsu.Gateway.Application.Elections.Queries.GetElection;
-using Saiketsu.Gateway.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Saiketsu.Gateway.Application.Elections.Queries.GetElectionCandidates;
+using Saiketsu.Gateway.Application.Interfaces;
 using Saiketsu.Gateway.Domain.Entities;
-using Saiketsu.Gateway.Domain.Entities.Election;
 using Xunit;
 
-namespace Application.UnitTests.Elections.Queries.GetElectionCandidates
+namespace Application.UnitTests.Elections.Queries.GetElectionCandidates;
+
+public sealed class GetElectionCandidatesQueryHandlerTests
 {
-    public sealed class GetElectionCandidatesQueryHandlerTests
+    private readonly Fixture _fixture;
+
+    private readonly GetElectionCandidatesQueryHandler _handler;
+    private readonly Mock<IElectionService> _mockElectionService;
+    private readonly Mock<IValidator<GetElectionCandidatesQuery>> _mockValidator;
+
+    public GetElectionCandidatesQueryHandlerTests()
     {
-        private readonly Fixture _fixture;
+        _fixture = new Fixture();
 
-        private readonly GetElectionCandidatesQueryHandler _handler;
-        private readonly Mock<IElectionService> _mockElectionService;
-        private readonly Mock<IValidator<GetElectionCandidatesQuery>> _mockValidator;
+        _mockElectionService = new Mock<IElectionService>();
+        _mockValidator = new Mock<IValidator<GetElectionCandidatesQuery>>();
+        _handler = new GetElectionCandidatesQueryHandler(_mockElectionService.Object, _mockValidator.Object);
+    }
 
-        public GetElectionCandidatesQueryHandlerTests()
-        {
-            _fixture = new Fixture();
+    [Fact]
+    public async Task Should_call_election_service_once()
+    {
+        // Arrange
+        var query = new GetElectionCandidatesQuery();
+        var cancellationToken = CancellationToken.None;
 
-            _mockElectionService = new Mock<IElectionService>();
-            _mockValidator = new Mock<IValidator<GetElectionCandidatesQuery>>();
-            _handler = new GetElectionCandidatesQueryHandler(_mockElectionService.Object, _mockValidator.Object);
-        }
+        // Act
+        await _handler.Handle(query, cancellationToken);
 
-        [Fact]
-        public async Task Should_call_election_service_once()
-        {
-            // Arrange
-            var query = new GetElectionCandidatesQuery();
-            var cancellationToken = CancellationToken.None;
+        // Assert
+        _mockElectionService.Verify(x => x.GetElectionCandidatesAsync(query.ElectionId), Times.Once);
+    }
 
-            // Act
-            await _handler.Handle(query, cancellationToken);
+    [Fact]
+    public async Task Should_validate_query_once()
+    {
+        // Arrange
+        var query = new GetElectionCandidatesQuery();
+        var cancellationToken = CancellationToken.None;
 
-            // Assert
-            _mockElectionService.Verify(x => x.GetElectionCandidatesAsync(query.ElectionId), Times.Once);
-        }
+        // Act
+        await _handler.Handle(query, cancellationToken);
 
-        [Fact]
-        public async Task Should_validate_query_once()
-        {
-            // Arrange
-            var query = new GetElectionCandidatesQuery();
-            var cancellationToken = CancellationToken.None;
+        // Assert
+        _mockValidator.Verify(
+            x => x.ValidateAsync(It.IsAny<ValidationContext<GetElectionCandidatesQuery>>(), cancellationToken),
+            Times.Once());
+    }
 
-            // Act
-            await _handler.Handle(query, cancellationToken);
+    [Fact]
+    public async Task Should_return_candidates()
+    {
+        // Arrange
+        var query = new GetElectionCandidatesQuery();
+        var cancellationToken = CancellationToken.None;
+        var methodResponse = _fixture.CreateMany<CandidateEntity>().ToList();
 
-            // Assert
-            _mockValidator.Verify(
-                x => x.ValidateAsync(It.IsAny<ValidationContext<GetElectionCandidatesQuery>>(), cancellationToken), Times.Once());
-        }
+        _mockElectionService.Setup(x => x.GetElectionCandidatesAsync(query.ElectionId)).ReturnsAsync(methodResponse);
 
-        [Fact]
-        public async Task Should_return_candidates()
-        {
-            // Arrange
-            var query = new GetElectionCandidatesQuery();
-            var cancellationToken = CancellationToken.None;
-            var methodResponse = _fixture.CreateMany<CandidateEntity>().ToList();
+        // Act
+        var response = await _handler.Handle(query, cancellationToken);
 
-            _mockElectionService.Setup(x => x.GetElectionCandidatesAsync(query.ElectionId)).ReturnsAsync(methodResponse);
-
-            // Act
-            var response = await _handler.Handle(query, cancellationToken);
-
-            // Assert
-            Assert.Equal(methodResponse, response);
-        }
+        // Assert
+        Assert.Equal(methodResponse, response);
     }
 }

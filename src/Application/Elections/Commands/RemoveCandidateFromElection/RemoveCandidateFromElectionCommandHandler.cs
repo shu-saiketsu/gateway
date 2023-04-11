@@ -4,7 +4,8 @@ using Saiketsu.Gateway.Application.Interfaces;
 
 namespace Saiketsu.Gateway.Application.Elections.Commands.RemoveCandidateFromElection;
 
-public sealed class RemoveCandidateFromElectionCommandHandler : IRequestHandler<RemoveCandidateFromElectionCommand, bool>
+public sealed class
+    RemoveCandidateFromElectionCommandHandler : IRequestHandler<RemoveCandidateFromElectionCommand, bool>
 {
     private readonly IElectionService _electionService;
     private readonly IValidator<RemoveCandidateFromElectionCommand> _validator;

@@ -21,10 +21,12 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
 
     [Theory]
     [AutoData]
-    public void Should_have_no_errors_when_valid_data(string name, ElectionType type, string ownerId, DateTime startDate, DateTime endDate)
+    public void Should_have_no_errors_when_valid_data(string name, ElectionType type, string ownerId,
+        DateTime startDate, DateTime endDate)
     {
         // Arrange
-        var command = new CreateElectionCommand { Name = name, Type = type, OwnerId = ownerId, StartDate = startDate, EndDate = endDate};
+        var command = new CreateElectionCommand
+            { Name = name, Type = type, OwnerId = ownerId, StartDate = startDate, EndDate = endDate };
 
         // Act
         var result = _validator.TestValidate(command);

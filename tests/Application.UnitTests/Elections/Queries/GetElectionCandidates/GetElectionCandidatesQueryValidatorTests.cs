@@ -1,67 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture.Xunit2;
+﻿using AutoFixture.Xunit2;
 using FluentValidation.TestHelper;
-using Saiketsu.Gateway.Application.Elections.Queries.GetElection;
 using Saiketsu.Gateway.Application.Elections.Queries.GetElectionCandidates;
 using Xunit;
 
-namespace Application.UnitTests.Elections.Queries.GetElectionCandidates
+namespace Application.UnitTests.Elections.Queries.GetElectionCandidates;
+
+public sealed class GetElectionCandidatesQueryValidatorTests : IDisposable
 {
-    public sealed class GetElectionCandidatesQueryValidatorTests : IDisposable
+    private readonly GetElectionCandidatesQueryValidator _validator;
+
+    public GetElectionCandidatesQueryValidatorTests()
     {
-        private readonly GetElectionCandidatesQueryValidator _validator;
+        _validator = new GetElectionCandidatesQueryValidator();
+    }
 
-        public GetElectionCandidatesQueryValidatorTests()
-        {
-            _validator = new GetElectionCandidatesQueryValidator();
-        }
+    public void Dispose()
+    {
+    }
 
-        [Theory]
-        [AutoData]
-        public void Should_have_no_errors_when_valid_data(int electionId)
-        {
-            // Arrange
-            var query = new GetElectionCandidatesQuery { ElectionId = electionId };
+    [Theory]
+    [AutoData]
+    public void Should_have_no_errors_when_valid_data(int electionId)
+    {
+        // Arrange
+        var query = new GetElectionCandidatesQuery { ElectionId = electionId };
 
-            // Act
-            var result = _validator.TestValidate(query);
+        // Act
+        var result = _validator.TestValidate(query);
 
-            // Assert
-            result.ShouldNotHaveAnyValidationErrors();
-        }
+        // Assert
+        result.ShouldNotHaveAnyValidationErrors();
+    }
 
-        [Fact]
-        public void Should_have_error_when_election_id_is_empty()
-        {
-            // Arrange
-            var query = new GetElectionCandidatesQuery { ElectionId = default };
+    [Fact]
+    public void Should_have_error_when_election_id_is_empty()
+    {
+        // Arrange
+        var query = new GetElectionCandidatesQuery { ElectionId = default };
 
-            // Act
-            var result = _validator.TestValidate(query);
+        // Act
+        var result = _validator.TestValidate(query);
 
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.ElectionId);
-        }
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.ElectionId);
+    }
 
-        [Fact]
-        public void Should_have_error_when_election_id_is_null()
-        {
-            // Arrange
-            var query = new GetElectionCandidatesQuery();
+    [Fact]
+    public void Should_have_error_when_election_id_is_null()
+    {
+        // Arrange
+        var query = new GetElectionCandidatesQuery();
 
-            // Act
-            var result = _validator.TestValidate(query);
+        // Act
+        var result = _validator.TestValidate(query);
 
-            // Assert
-            result.ShouldHaveValidationErrorFor(x => x.ElectionId);
-        }
-
-        public void Dispose()
-        {
-        }
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.ElectionId);
     }
 }

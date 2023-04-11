@@ -27,7 +27,8 @@ public sealed class CreateUserCommandValidatorTests : IDisposable
         const RoleEnum role = RoleEnum.Administrator;
         const string firstName = "First";
         const string lastName = "Last";
-        var command = new CreateUserCommand { Email = email, Password = password, Role = role, FirstName = firstName, LastName = lastName};
+        var command = new CreateUserCommand
+            { Email = email, Password = password, Role = role, FirstName = firstName, LastName = lastName };
 
         // Act
         var result = _validator.TestValidate(command);
@@ -156,7 +157,7 @@ public sealed class CreateUserCommandValidatorTests : IDisposable
     public void Should_have_error_when_last_name_is_empty()
     {
         // Arrange
-        var command = new CreateUserCommand {LastName = string.Empty };
+        var command = new CreateUserCommand { LastName = string.Empty };
 
         // Act
         var result = _validator.TestValidate(command);
