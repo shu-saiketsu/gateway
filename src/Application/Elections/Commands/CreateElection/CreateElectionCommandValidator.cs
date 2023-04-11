@@ -15,5 +15,11 @@ public sealed class CreateElectionCommandValidator : AbstractValidator<CreateEle
 
         RuleFor(x => x.OwnerId)
             .NotEmpty();
+
+        RuleFor(x => x.StartDate)
+            .NotEmpty();
+
+        RuleFor(x => x.EndDate)
+            .NotEmpty();
     }
 }

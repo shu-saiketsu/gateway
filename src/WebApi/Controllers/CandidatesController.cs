@@ -53,7 +53,7 @@ public sealed class CandidatesController : ControllerBase
     [SwaggerOperation(Summary = "Retrieve a candidate")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved candidate successfully", typeof(CandidateEntity))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Candidate does not exist")]
-    [Authorize("read:candidates")]
+    [Authorize]
     public async Task<IActionResult> Get([Required] int id)
     {
         var message = new GetCandidateQuery { Id = id };

@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using Saiketsu.Gateway.Application.Users.Commands.CreateUser;
+using Saiketsu.Gateway.Domain.Enums;
 using Xunit;
 
 namespace Application.UnitTests.Users.Commands.CreateUser;
@@ -23,7 +24,10 @@ public sealed class CreateUserCommandValidatorTests : IDisposable
         // Arrange
         const string email = "email@email.com";
         const string password = "Password100%";
-        var command = new CreateUserCommand { Email = email, Password = password };
+        const RoleEnum role = RoleEnum.Administrator;
+        const string firstName = "First";
+        const string lastName = "Last";
+        var command = new CreateUserCommand { Email = email, Password = password, Role = role, FirstName = firstName, LastName = lastName};
 
         // Act
         var result = _validator.TestValidate(command);
@@ -120,5 +124,70 @@ public sealed class CreateUserCommandValidatorTests : IDisposable
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Password);
+    }
+
+    [Fact]
+    public void Should_have_error_when_first_name_is_empty()
+    {
+        // Arrange
+        var command = new CreateUserCommand { FirstName = string.Empty };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.FirstName);
+    }
+
+    [Fact]
+    public void Should_have_error_when_first_name_is_null()
+    {
+        // Arrange
+        var command = new CreateUserCommand();
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.FirstName);
+    }
+
+    [Fact]
+    public void Should_have_error_when_last_name_is_empty()
+    {
+        // Arrange
+        var command = new CreateUserCommand {LastName = string.Empty };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.FirstName);
+    }
+
+    [Fact]
+    public void Should_have_error_when_last_name_is_null()
+    {
+        // Arrange
+        var command = new CreateUserCommand();
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.FirstName);
+    }
+
+    [Fact]
+    public void Should_have_error_when_role_is_null()
+    {
+        // Arrange
+        var command = new CreateUserCommand();
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.Role);
     }
 }

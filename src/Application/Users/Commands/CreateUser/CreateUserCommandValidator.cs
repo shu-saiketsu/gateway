@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Data;
+using FluentValidation;
 
 namespace Saiketsu.Gateway.Application.Users.Commands.CreateUser;
 
@@ -17,5 +18,14 @@ public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCom
             .Matches("[a-z]+")
             .Matches("[A-Z]+")
             .Matches("[0-9]+");
+
+        RuleFor(x => x.FirstName)
+            .NotEmpty();
+
+        RuleFor(x => x.LastName)
+            .NotEmpty();
+
+        RuleFor(x => x.Role)
+            .NotNull();
     }
 }

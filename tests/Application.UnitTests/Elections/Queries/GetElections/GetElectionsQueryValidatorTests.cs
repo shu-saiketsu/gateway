@@ -2,4 +2,5 @@
 
 internal class GetElectionsQueryValidatorTests
 {
+    // No tests permitted
 }

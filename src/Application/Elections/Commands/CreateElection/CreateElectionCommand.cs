@@ -9,4 +9,6 @@ public sealed class CreateElectionCommand : IRequest<ElectionEntity?>
     public string Name { get; set; } = null!;
     public ElectionType Type { get; set; }
     public string OwnerId { get; set; } = null!;
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 }

@@ -53,7 +53,7 @@ public sealed class PartiesController : ControllerBase
     [SwaggerOperation(Summary = "Retrieve a party")]
     [SwaggerResponse(StatusCodes.Status200OK, "Retrieved party successfully", typeof(PartyEntity))]
     [SwaggerResponse(StatusCodes.Status404NotFound, "Party does not exist")]
-    [Authorize("read:parties")]
+    [Authorize]
     public async Task<IActionResult> Get([Required] int id)
     {
         var message = new GetPartyQuery { Id = id };

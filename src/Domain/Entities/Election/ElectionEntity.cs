@@ -10,4 +10,6 @@ public sealed class ElectionEntity
     [JsonPropertyName("type")] public ElectionTypeEntity Type { get; set; } = null!;
     [JsonPropertyName("ownerId")] public string OwnerId { get; set; } = null!;
     [JsonPropertyName("owner")] public UserEntity Owner { get; set; } = null!;
+    [JsonPropertyName("startDate")] public DateTime StartDate { get; set; }
+    [JsonPropertyName("endDate")] public DateTime EndDate { get; set; }
 }

@@ -21,10 +21,10 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
 
     [Theory]
     [AutoData]
-    public void Should_have_no_errors_when_valid_data(string name, ElectionType type, string ownerId)
+    public void Should_have_no_errors_when_valid_data(string name, ElectionType type, string ownerId, DateTime startDate, DateTime endDate)
     {
         // Arrange
-        var command = new CreateElectionCommand { Name = name, Type = type, OwnerId = ownerId };
+        var command = new CreateElectionCommand { Name = name, Type = type, OwnerId = ownerId, StartDate = startDate, EndDate = endDate};
 
         // Act
         var result = _validator.TestValidate(command);
@@ -33,12 +33,11 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
         result.ShouldNotHaveAnyValidationErrors();
     }
 
-    [Theory]
-    [AutoData]
-    public void Should_have_error_when_name_is_empty(ElectionType type, string ownerId)
+    [Fact]
+    public void Should_have_error_when_name_is_empty()
     {
         // Arrange
-        var command = new CreateElectionCommand { Name = string.Empty, Type = type, OwnerId = ownerId };
+        var command = new CreateElectionCommand { Name = string.Empty };
 
         // Act
         var result = _validator.TestValidate(command);
@@ -47,12 +46,11 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
         result.ShouldHaveValidationErrorFor(x => x.Name);
     }
 
-    [Theory]
-    [AutoData]
-    public void Should_have_error_when_name_is_null(ElectionType type, string ownerId)
+    [Fact]
+    public void Should_have_error_when_name_is_null()
     {
         // Arrange
-        var command = new CreateElectionCommand { Type = type, OwnerId = ownerId };
+        var command = new CreateElectionCommand();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -61,12 +59,11 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
         result.ShouldHaveValidationErrorFor(x => x.Name);
     }
 
-    [Theory]
-    [AutoData]
-    public void Should_have_error_when_election_type_is_null(string name, string ownerId)
+    [Fact]
+    public void Should_have_error_when_election_type_is_null()
     {
         // Arrange
-        var command = new CreateElectionCommand { Name = name, OwnerId = ownerId };
+        var command = new CreateElectionCommand();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -75,12 +72,11 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
         result.ShouldHaveValidationErrorFor(x => x.Type);
     }
 
-    [Theory]
-    [AutoData]
-    public void Should_have_error_when_election_type_is_empty(string name, string ownerId)
+    [Fact]
+    public void Should_have_error_when_election_type_is_empty()
     {
         // Arrange
-        var command = new CreateElectionCommand { Type = default, Name = name, OwnerId = ownerId };
+        var command = new CreateElectionCommand { Type = default };
 
         // Act
         var result = _validator.TestValidate(command);
@@ -89,12 +85,11 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
         result.ShouldHaveValidationErrorFor(x => x.Type);
     }
 
-    [Theory]
-    [AutoData]
-    public void Should_have_error_when_owner_is_null(string name, ElectionType type)
+    [Fact]
+    public void Should_have_error_when_owner_is_null()
     {
         // Arrange
-        var command = new CreateElectionCommand { Name = name, Type = type };
+        var command = new CreateElectionCommand();
 
         // Act
         var result = _validator.TestValidate(command);
@@ -103,17 +98,68 @@ public sealed class CreateElectionCommandValidatorTests : IDisposable
         result.ShouldHaveValidationErrorFor(x => x.OwnerId);
     }
 
-    [Theory]
-    [AutoData]
-    public void Should_have_error_when_owner_is_empty(string name, ElectionType type)
+    [Fact]
+    public void Should_have_error_when_owner_is_empty()
     {
         // Arrange
-        var command = new CreateElectionCommand { Name = name, Type = type, OwnerId = string.Empty };
+        var command = new CreateElectionCommand { OwnerId = string.Empty };
 
         // Act
         var result = _validator.TestValidate(command);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.OwnerId);
+    }
+
+    [Fact]
+    public void Should_have_error_when_start_date_is_null()
+    {
+        // Arrange
+        var command = new CreateElectionCommand();
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.StartDate);
+    }
+
+    [Fact]
+    public void Should_have_error_when_start_date_is_empty()
+    {
+        // Arrange
+        var command = new CreateElectionCommand { StartDate = default };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.StartDate);
+    }
+
+    [Fact]
+    public void Should_have_error_when_end_date_is_null()
+    {
+        // Arrange
+        var command = new CreateElectionCommand();
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.EndDate);
+    }
+
+    [Fact]
+    public void Should_have_error_when_end_date_is_empty()
+    {
+        // Arrange
+        var command = new CreateElectionCommand { EndDate = default };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldHaveValidationErrorFor(x => x.EndDate);
     }
 }
