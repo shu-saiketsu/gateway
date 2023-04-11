@@ -180,15 +180,41 @@ public sealed class CreateUserCommandValidatorTests : IDisposable
     }
 
     [Fact]
-    public void Should_have_error_when_role_is_null()
+    public void Should_have_no_error_when_role_is_valid()
     {
         // Arrange
-        var command = new CreateUserCommand();
+        var command = new CreateUserCommand { Role = RoleEnum.Administrator };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldNotHaveValidationErrorFor(x => x.Role);
+    }
+
+    [Fact]
+    public void Should_have_error_when_role_is_not_valid()
+    {
+        // Arrange
+        var command = new CreateUserCommand { Role = (RoleEnum?)5 };
 
         // Act
         var result = _validator.TestValidate(command);
 
         // Assert
         result.ShouldHaveValidationErrorFor(x => x.Role);
+    }
+
+    [Fact]
+    public void Should_have_no_error_when_role_is_null()
+    {
+        // Arrange
+        var command = new CreateUserCommand { Role = null };
+
+        // Act
+        var result = _validator.TestValidate(command);
+
+        // Assert
+        result.ShouldNotHaveValidationErrorFor(x => x.Role);
     }
 }

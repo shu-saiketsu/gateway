@@ -118,6 +118,8 @@ static void AddServices(WebApplicationBuilder builder)
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
 
+    builder.Services.AddHealthChecks();
+
     builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IApplicationMarker).Assembly));
     builder.Services.AddValidatorsFromAssemblyContaining<IApplicationMarker>();
 
@@ -141,6 +143,7 @@ static void AddMiddleware(WebApplication app)
     }
 
     app.MapControllers();
+    app.MapHealthChecks("/health");
 }
 
 try

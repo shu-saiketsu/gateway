@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Saiketsu.Gateway.Domain.Enums;
 
 namespace Saiketsu.Gateway.Application.Users.Commands.CreateUser;
 
@@ -24,7 +25,12 @@ public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCom
         RuleFor(x => x.LastName)
             .NotEmpty();
 
-        RuleFor(x => x.Role)
-            .NotNull();
+        RuleFor(x => x.Role).Custom((@enum, context) =>
+        {
+            if (@enum == null) return;
+
+            var isValid = Enum.IsDefined(typeof(RoleEnum), @enum);
+            if (!isValid) context.AddFailure("Enum is not valid.");
+        });
     }
 }
