@@ -19,9 +19,4 @@
     <PackageReference Include="MediatR" Version="12.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Votes\Commands\" />
-    <Folder Include="Votes\Queries\" />
-  </ItemGroup>
-
 </Project>
